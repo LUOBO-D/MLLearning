@@ -1,0 +1,172 @@
+{
+  "version": "2026.11-diagnostic-v1",
+  "estimated_minutes": 8,
+  "domains": [
+    {
+      "id": "prerequisites",
+      "label": "先修补给",
+      "description": "斜率、残差与变化方向"
+    },
+    {
+      "id": "loss",
+      "label": "损失与拟合",
+      "description": "MSE 与最小二乘"
+    },
+    {
+      "id": "generalization",
+      "label": "泛化与评估",
+      "description": "训练、验证与数据泄漏"
+    },
+    {
+      "id": "regularization",
+      "label": "约束与选择",
+      "description": "Ridge 与超参数"
+    }
+  ],
+  "questions": [
+    {
+      "id": 101,
+      "domain": "prerequisites",
+      "version": "diag-v1-101",
+      "dimension": "prediction",
+      "difficulty": "基础",
+      "prompt": "在一元线性模型 ŷ = w₀ + w₁x 中，保持截距 w₀ 不变、增大斜率 w₁，预测直线会怎样变化？",
+      "options": [
+        { "id": "a", "text": "整体向上平移，倾斜程度不变" },
+        { "id": "b", "text": "绕点 (0, w₀) 转动，变得更陡" },
+        { "id": "c", "text": "绕点 (1, w₀) 转动，变得更平" },
+        { "id": "d", "text": "保持位置不变，只改变残差符号" }
+      ],
+      "correct_answer_id": "b",
+      "explanation": "截距固定时，x = 0 处的预测始终是 w₀；增大 w₁ 只会让直线绕这个点变陡。斜率描述的是每增加一个单位 x，预测值改变多少。",
+      "hint": "先看 x = 0 时预测值是否变化，再比较 x 增大后的预测值。",
+      "misconception": "把斜率变化理解成整条直线的上下平移，混淆了斜率与截距各自控制的部分。"
+    },
+    {
+      "id": 102,
+      "domain": "prerequisites",
+      "version": "diag-v1-102",
+      "dimension": "calculation",
+      "difficulty": "基础",
+      "prompt": "残差定义为 e = y − ŷ。某个样本的残差 e > 0，若只想让它的平方损失变小，最直接的调整方向是什么？",
+      "options": [
+        { "id": "a", "text": "增大该样本的预测值 ŷ" },
+        { "id": "b", "text": "减小该样本的预测值 ŷ" },
+        { "id": "c", "text": "继续增大残差 e" },
+        { "id": "d", "text": "把真实标签 y 改小" }
+      ],
+      "correct_answer_id": "a",
+      "explanation": "e = y − ŷ > 0 说明预测偏低。增大 ŷ 会让残差向 0 靠近，平方损失随之下降。改变标签不是模型调整，而是篡改评估目标。",
+      "hint": "正残差意味着真实值大于预测值；预测应该朝哪个方向移动？",
+      "misconception": "看到残差为正就以为预测偏高，忽略了残差的定义顺序是“真实减预测”。"
+    },
+    {
+      "id": 103,
+      "domain": "loss",
+      "version": "diag-v1-103",
+      "dimension": "concept",
+      "difficulty": "基础",
+      "prompt": "关于均方误差 MSE = (1/n) Σ(yᵢ − ŷᵢ)²，下列哪项正确？",
+      "options": [
+        { "id": "a", "text": "MSE 越小，测试集上的误差就一定越小" },
+        { "id": "b", "text": "MSE 与目标变量 y 使用完全相同的单位" },
+        { "id": "c", "text": "平方会放大大残差的影响，因此 MSE 对离群点更敏感" },
+        { "id": "d", "text": "最小化 MSE 与最小化平均绝对误差总会得到同一组参数" }
+      ],
+      "correct_answer_id": "c",
+      "explanation": "平方让较大的残差贡献更多，所以 MSE 对离群点更敏感。它的单位是 y 的平方；训练集 MSE 变小也不保证测试集误差变小。",
+      "hint": "分别想一想：平方如何改变大残差的权重？训练误差能代表测试误差吗？",
+      "misconception": "把训练集上的 MSE 直接当成泛化误差，忽略了过拟合与数据分布差异。"
+    },
+    {
+      "id": 104,
+      "domain": "loss",
+      "version": "diag-v1-104",
+      "dimension": "calculation",
+      "difficulty": "基础",
+      "prompt": "三个样本的残差分别为 1、−2、1。它们的均方误差 MSE 是多少？",
+      "options": [
+        { "id": "a", "text": "2" },
+        { "id": "b", "text": "4/3" },
+        { "id": "c", "text": "4" },
+        { "id": "d", "text": "6" }
+      ],
+      "correct_answer_id": "a",
+      "explanation": "先平方再平均：(1² + (−2)² + 1²) / 3 = (1 + 4 + 1) / 3 = 2。负残差平方后同样变成正贡献。",
+      "hint": "先逐个平方，再求和，最后除以样本数。",
+      "misconception": "先把残差相加再平方，或忘记负残差平方后会变成正数。"
+    },
+    {
+      "id": 105,
+      "domain": "generalization",
+      "version": "diag-v1-105",
+      "dimension": "diagnosis",
+      "difficulty": "进阶",
+      "prompt": "训练误差持续下降，但验证误差先下降、随后明显上升。最合理的解释是什么？",
+      "options": [
+        { "id": "a", "text": "正则化强度一定过大" },
+        { "id": "b", "text": "模型开始拟合训练集中的噪声，泛化变差" },
+        { "id": "c", "text": "训练集与验证集一定来自同一分布" },
+        { "id": "d", "text": "模型参数数量正在减少" }
+      ],
+      "correct_answer_id": "b",
+      "explanation": "训练误差下降只说明模型越来越贴合训练样本；验证误差回升说明这种贴合没有迁移到新样本，常见原因是模型复杂度上升后拟合了噪声。",
+      "hint": "比较两条误差曲线分叉的时刻，问自己：模型在迎合谁？",
+      "misconception": "把训练误差下降等同于模型变好，忽略验证误差才是泛化表现的观察窗口。"
+    },
+    {
+      "id": 106,
+      "domain": "generalization",
+      "version": "diag-v1-106",
+      "dimension": "diagnosis",
+      "difficulty": "进阶",
+      "prompt": "下列哪种做法最可能造成数据泄漏？",
+      "options": [
+        { "id": "a", "text": "在划分训练集与测试集之前，用全部数据计算标准化参数" },
+        { "id": "b", "text": "只在训练集上拟合标准化参数，再应用到测试集" },
+        { "id": "c", "text": "用验证集选择正则化强度" },
+        { "id": "d", "text": "固定随机种子来划分训练集和测试集" }
+      ],
+      "correct_answer_id": "a",
+      "explanation": "用全部数据计算均值和方差会把测试集信息提前带入训练流程，使评估偏乐观。正确做法是只在训练集上拟合预处理参数，再原样应用到测试集。",
+      "hint": "检查每一步是否“看见”了测试集的信息。",
+      "misconception": "只把泄漏理解为“把测试标签放进训练”，忽略了预处理阶段也会泄露分布信息。"
+    },
+    {
+      "id": 107,
+      "domain": "regularization",
+      "version": "diag-v1-107",
+      "dimension": "prediction",
+      "difficulty": "进阶",
+      "prompt": "提高 Ridge 回归的正则化强度 λ，通常会观察到什么？",
+      "options": [
+        { "id": "a", "text": "所有系数都精确变成 0，模型不再使用任何特征" },
+        { "id": "b", "text": "模型使用的特征数量自动减少" },
+        { "id": "c", "text": "系数被更强地压向 0，训练误差可能上升" },
+        { "id": "d", "text": "训练误差通常下降，因为模型变得更简单" }
+      ],
+      "correct_answer_id": "c",
+      "explanation": "Ridge 的惩罚项会压缩系数幅度，λ 越大压缩越强，模型偏差上升、训练误差可能变大。Ridge 一般不会把系数精确压到 0，也不会自动做特征选择。",
+      "hint": "区分“系数变小”和“系数变成 0”，再想想更强约束对训练拟合的影响。",
+      "misconception": "把 Ridge 的收缩与 Lasso 的稀疏选择混为一谈，或误以为更强正则化一定降低训练误差。"
+    },
+    {
+      "id": 108,
+      "domain": "regularization",
+      "version": "diag-v1-108",
+      "dimension": "diagnosis",
+      "difficulty": "进阶",
+      "prompt": "反复用测试集选择 λ，再报告该测试集上的误差，主要问题是什么？",
+      "options": [
+        { "id": "a", "text": "测试集样本数量会因此减少" },
+        { "id": "b", "text": "测试集信息泄漏到模型选择中，误差估计偏乐观" },
+        { "id": "c", "text": "λ 一定会变得过小" },
+        { "id": "d", "text": "Ridge 不能用于回归任务" }
+      ],
+      "correct_answer_id": "b",
+      "explanation": "一旦测试集参与了超参数选择，它就不再是未见数据。报告的性能会被乐观偏置。应使用验证集或交叉验证选择 λ，把测试集留到最终一次评估。",
+      "hint": "测试集的意义是“从未参与决策”；反复选择 λ 之后它还满足吗？",
+      "misconception": "把“测试集准确率高”当成模型好，而没有检查测试集是否参与了超参数选择。"
+    }
+  ]
+}

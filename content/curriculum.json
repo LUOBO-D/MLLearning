@@ -1,0 +1,238 @@
+{
+  "version": "2026.11",
+  "title": "机器学习系统学习路径",
+  "description": "从数据与数学准备到工程实践，共 7 个阶段、9 章引导课程。每章都有推导、交互实验与练习，每个阶段都配有按顺序阅读的词条和一个可交付的里程碑。",
+  "stages": [
+    {
+      "id": "stage-0",
+      "order": 0,
+      "title": "起步：数据与数学准备",
+      "tagline": "先认识数据，再认识公式",
+      "goal": "能看懂一张训练数据表，读懂本课程里出现的向量、导数和概率记号。",
+      "hours": 6,
+      "level": "入门",
+      "outcomes": [
+        "说清样本、特征、标签分别是什么，区分回归与分类任务。",
+        "会做向量点积和矩阵乘法，知道 Xw 的含义。",
+        "会求简单函数的导数，理解梯度是偏导数组成的向量。",
+        "理解期望与方差，能解释“平均误差”的统计含义。"
+      ],
+      "concepts": [],
+      "foundations": [
+        "sample-feature-label",
+        "supervised-unsupervised",
+        "classification-regression",
+        "vector-matrix",
+        "dot-product",
+        "derivative-gradient",
+        "probability-expectation"
+      ],
+      "milestone": {
+        "title": "完成起点诊断",
+        "detail": "用 8 道短题定位你的起点。结果只给入口建议，不会生成掌握率；如果先修部分不熟，先读完本阶段词条再进入阶段 1。",
+        "href": "/diagnostic",
+        "action": "开始起点诊断"
+      }
+    },
+    {
+      "id": "stage-1",
+      "order": 1,
+      "title": "回归与优化",
+      "tagline": "一条直线，和找到它的方法",
+      "goal": "用线性回归建立“模型—损失—优化”的完整框架，并能用梯度下降从零训练模型。",
+      "hours": 10,
+      "level": "入门",
+      "outcomes": [
+        "写出线性回归的预测式与 MSE，解释残差的含义。",
+        "手算并用代码实现最小二乘与梯度下降，比较两者结果。",
+        "根据损失曲线判断学习率是否合适，说明特征缩放的作用。"
+      ],
+      "concepts": [
+        "linear-regression",
+        "gradient-descent"
+      ],
+      "foundations": [
+        "model-parameters",
+        "loss-function",
+        "mse",
+        "learning-rate",
+        "epoch-batch",
+        "feature-scaling",
+        "chain-rule"
+      ],
+      "milestone": {
+        "title": "阶段项目：从零实现线性回归",
+        "detail": "只用 NumPy，在一份房价数据上分别用闭式解和小批量梯度下降拟合模型，画出损失曲线，比较两者的参数与测试 RMSE。",
+        "href": "/learn/gradient-descent#section-experiment",
+        "action": "先在实验里调一次学习率"
+      }
+    },
+    {
+      "id": "stage-2",
+      "order": 2,
+      "title": "泛化：从拟合到预测",
+      "tagline": "训练得好，不等于预测得准",
+      "goal": "理解过拟合的来源，学会用验证集、偏差—方差分析和正则化控制模型复杂度。",
+      "hours": 10,
+      "level": "基础",
+      "outcomes": [
+        "区分训练误差与泛化误差，识别欠拟合与过拟合。",
+        "用偏差—方差分解解释模型复杂度的影响。",
+        "用 L2/L1 正则化与验证曲线选择合适的强度。"
+      ],
+      "concepts": [
+        "overfitting",
+        "regularization"
+      ],
+      "foundations": [
+        "train-validation-test",
+        "overfitting-underfitting",
+        "bias-variance",
+        "regularization",
+        "l1-l2",
+        "hyperparameters",
+        "cross-validation"
+      ],
+      "milestone": {
+        "title": "阶段项目：画出你的验证曲线",
+        "detail": "对多项式回归分别扫描阶数和正则化强度 α，画出训练/验证误差曲线，写一段话说明你选择的模型及理由。",
+        "href": "/learn/regularization#section-experiment",
+        "action": "打开正则化实验"
+      }
+    },
+    {
+      "id": "stage-3",
+      "order": 3,
+      "title": "分类与评估",
+      "tagline": "给出概率，再诚实地打分",
+      "goal": "掌握逻辑回归和交叉熵，学会用正确的指标与流程评估分类模型。",
+      "hours": 12,
+      "level": "基础",
+      "outcomes": [
+        "写出逻辑回归的概率模型和交叉熵损失，解释权重的几率含义。",
+        "根据业务代价选择阈值，计算精确率、召回率与 F1。",
+        "用 ROC/AUC 与分层交叉验证比较模型，识别数据泄漏。"
+      ],
+      "concepts": [
+        "logistic-regression",
+        "model-evaluation"
+      ],
+      "foundations": [
+        "cross-entropy",
+        "softmax",
+        "confusion-matrix",
+        "precision-recall",
+        "roc-auc",
+        "imbalanced-data",
+        "data-leakage",
+        "baseline",
+        "pipeline"
+      ],
+      "milestone": {
+        "title": "阶段项目：一个不平衡分类任务",
+        "detail": "在信用卡欺诈或疾病筛查这类正类稀少的数据上训练逻辑回归，用 Pipeline + 分层 5 折交叉验证报告 AUC ± 标准差，并按召回率约束选择阈值。",
+        "href": "/learn/model-evaluation#section-experiment",
+        "action": "打开评估实验"
+      }
+    },
+    {
+      "id": "stage-4",
+      "order": 4,
+      "title": "经典算法扩展",
+      "tagline": "同一套框架，不同的模型",
+      "goal": "把前面的框架迁移到常用的经典算法上，知道每种算法适合什么数据、主要超参数是什么。",
+      "hours": 16,
+      "level": "基础",
+      "outcomes": [
+        "说明 KNN、决策树、SVM、朴素贝叶斯的基本假设与适用场景。",
+        "理解随机森林与梯度提升如何通过集成降低方差或偏差。",
+        "用 K 均值与 PCA 完成聚类和降维，并解释结果。"
+      ],
+      "concepts": [
+        "decision-trees"
+      ],
+      "foundations": [
+        "knn",
+        "decision-tree",
+        "random-forest",
+        "gradient-boosting",
+        "svm",
+        "naive-bayes",
+        "kmeans",
+        "pca"
+      ],
+      "milestone": {
+        "title": "阶段项目：模型对比报告",
+        "detail": "在同一份表格数据上比较逻辑回归、随机森林和梯度提升，统一使用阶段 3 的评估流程，写一页报告说明哪个模型更好以及原因。",
+        "href": "/learn/decision-trees#section-experiment",
+        "action": "打开决策树实验"
+      }
+    },
+    {
+      "id": "stage-5",
+      "order": 5,
+      "title": "深度学习入门",
+      "tagline": "把逻辑回归一层层叠起来",
+      "goal": "理解神经网络就是多层的“线性打分 + 非线性”，掌握反向传播与常用优化器。",
+      "hours": 20,
+      "level": "进阶",
+      "outcomes": [
+        "写出多层感知机的前向传播，解释激活函数的作用。",
+        "用链式法则推导反向传播，理解自动微分做了什么。",
+        "说明 SGD、动量、Adam 的区别，知道 CNN、嵌入和注意力分别解决什么问题。"
+      ],
+      "concepts": [
+        "neural-networks"
+      ],
+      "foundations": [
+        "neural-network",
+        "mlp",
+        "activation-functions",
+        "backpropagation",
+        "sgd-momentum",
+        "adam",
+        "cnn",
+        "embedding",
+        "attention-transformer"
+      ],
+      "milestone": {
+        "title": "阶段项目：训练第一个神经网络",
+        "detail": "用 PyTorch 在 MNIST 上训练一个两层 MLP，记录训练/验证曲线，比较 SGD 与 Adam，并尝试加入 Dropout 或权重衰减。",
+        "href": "/learn/neural-networks#section-experiment",
+        "action": "打开神经网络实验"
+      }
+    },
+    {
+      "id": "stage-6",
+      "order": 6,
+      "title": "工程实践",
+      "tagline": "让模型在真实世界里可靠",
+      "goal": "建立可复现、可诊断、可监控的机器学习工作流。",
+      "hours": 12,
+      "level": "进阶",
+      "outcomes": [
+        "用错误分析和切片评估找到模型的薄弱环节。",
+        "用嵌套交叉验证和概率校准得到可信的性能与概率。",
+        "固定随机种子、记录配置，上线后监控数据漂移。"
+      ],
+      "concepts": [
+        "ml-engineering"
+      ],
+      "foundations": [
+        "error-analysis",
+        "model-selection",
+        "feature-selection",
+        "nested-cv",
+        "calibration",
+        "reproducibility",
+        "monitoring"
+      ],
+      "milestone": {
+        "title": "阶段项目：端到端小项目",
+        "detail": "选一个你关心的问题，从数据清洗、基线、模型选择到错误分析完整走一遍，用 README 记录每一步的决定与证据。",
+        "href": "/journal",
+        "action": "在学习日志里写下计划"
+      }
+    }
+  ]
+}

@@ -1,0 +1,669 @@
+/* Long-form teaching layer: a reading sequence, not a stack of generic cards. */
+.lesson-narrative {
+  margin-top: 42px;
+}
+
+.lesson-hook {
+  position: relative;
+  margin: 0 0 52px;
+  padding: 28px 32px 30px;
+  overflow: hidden;
+  border: 1px solid rgba(103, 87, 231, 0.22);
+  border-radius: 3px 28px 3px 3px;
+  background: #eeebff;
+}
+
+.lesson-hook::after {
+  position: absolute;
+  right: -38px;
+  bottom: -68px;
+  width: 170px;
+  height: 170px;
+  border: 1px solid rgba(103, 87, 231, 0.18);
+  border-radius: 50%;
+  box-shadow: 0 0 0 28px rgba(103, 87, 231, 0.045), 0 0 0 56px rgba(103, 87, 231, 0.035);
+  content: "";
+  pointer-events: none;
+}
+
+.lesson-hook > span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #4f3dbb;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: 0.1em;
+}
+
+.lesson-hook p {
+  position: relative;
+  z-index: 1;
+  max-width: 42ch;
+  margin: 14px 0 0;
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 18px;
+  line-height: 1.8;
+}
+
+.lesson-chapter-stack {
+  counter-reset: lesson-block;
+}
+
+.lesson-chapter-block {
+  padding: 0 0 48px;
+}
+
+.lesson-chapter-block + .lesson-chapter-block {
+  padding-top: 44px;
+  border-top: 1px solid var(--line);
+}
+
+.lesson-block-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.lesson-block-heading > span {
+  flex: 0 0 auto;
+  color: #5a46d2;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0.05em;
+}
+
+.lesson-block-heading h3 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 21.5px;
+  font-weight: 620;
+  letter-spacing: -0.035em;
+  line-height: 1.35;
+}
+
+.lesson-chapter-block .lesson-prose p {
+  margin: 0 0 18px;
+  font-size: 15.5px;
+  line-height: 2;
+}
+
+.lesson-derivation {
+  margin-top: 28px;
+  padding: 24px 26px;
+  border: 1px solid var(--line);
+  border-left: 3px solid #6757e7;
+  background: rgba(255, 255, 255, 0.58);
+}
+
+.lesson-derivation > span,
+.teaching-card-header > span {
+  color: #5441c2;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: 0.13em;
+}
+
+.lesson-derivation .math-block {
+  margin: 22px 0 12px;
+  padding-bottom: 8px;
+  font-size: 15.5px;
+}
+
+.lesson-derivation > p {
+  margin: 16px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.85;
+}
+
+.lesson-derivation .math-overflow-hint,
+.worked-example .math-overflow-hint {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.worked-example {
+  margin: 10px 0 52px;
+  overflow: hidden;
+  border: 1px solid #cdd8a8;
+  border-radius: 4px;
+  background: #f0f5dc;
+}
+
+.teaching-card-header {
+  padding: 28px 30px 24px;
+}
+
+.teaching-card-header h3 {
+  margin: 9px 0 12px;
+  font-size: 20.5px;
+  font-weight: 650;
+  letter-spacing: -0.025em;
+}
+
+.teaching-card-header > p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.85;
+}
+
+.worked-example-steps {
+  margin: 0;
+  padding: 0 30px;
+  list-style: none;
+}
+
+.worked-example-steps > li {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  gap: 18px;
+  padding: 24px 0;
+  border-top: 1px solid rgba(77, 94, 56, 0.2);
+}
+
+.worked-step-index {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border: 1px solid #a7b582;
+  border-radius: 50%;
+  color: #435132;
+  font-family: var(--mono);
+  font-size: 13px;
+}
+
+.worked-example-steps h4 {
+  margin: 3px 0 9px;
+  font-size: 14.5px;
+  font-weight: 650;
+}
+
+.worked-example-steps p {
+  margin: 0;
+  color: #3f4c37;
+  font-size: 14px;
+  line-height: 1.85;
+}
+
+.worked-example-steps .math-block {
+  margin: 18px 0 0;
+  padding: 18px;
+  border: 1px solid rgba(77, 94, 56, 0.17);
+  background: rgba(255, 255, 255, 0.52);
+  font-size: 14.5px;
+}
+
+.worked-conclusion {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  margin-top: 4px;
+  padding: 24px 30px;
+  background: #dfeabd;
+  color: #293622;
+}
+
+.worked-conclusion svg {
+  flex: 0 0 auto;
+  margin-top: 4px;
+}
+
+.worked-conclusion p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.85;
+}
+
+.worked-conclusion strong {
+  display: block;
+  margin-bottom: 3px;
+}
+
+.code-walkthrough {
+  margin: 0 0 52px;
+  overflow: hidden;
+  border-radius: 4px 24px 4px 4px;
+  background: #101916;
+  color: #f4f6ef;
+}
+
+.code-walkthrough .teaching-card-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.13);
+}
+
+.code-walkthrough .teaching-card-header > span {
+  color: #d9f99d;
+}
+
+.code-walkthrough .teaching-card-header h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 0;
+  color: #f4f6ef;
+}
+
+.code-walkthrough-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(220px, 0.8fr);
+}
+
+.code-walkthrough pre {
+  min-width: 0;
+  margin: 0;
+  padding: 26px;
+  overflow: auto;
+  border-right: 1px solid rgba(255, 255, 255, 0.13);
+  color: #eaf4e6;
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.85;
+  tab-size: 4;
+}
+
+.code-walkthrough pre:focus-visible {
+  outline: 2px solid #d9f99d;
+  outline-offset: -4px;
+}
+
+.code-walkthrough-grid > ol {
+  margin: 0;
+  padding: 12px 24px;
+  list-style: none;
+}
+
+.code-walkthrough-grid > ol > li {
+  display: grid;
+  grid-template-columns: 25px 1fr;
+  gap: 9px;
+  padding: 15px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.code-walkthrough-grid > ol > li:last-child {
+  border-bottom: 0;
+}
+
+.code-walkthrough-grid > ol span {
+  color: #d9f99d;
+  font-family: var(--mono);
+  font-size: 13px;
+}
+
+.code-walkthrough-grid > ol p {
+  margin: 0;
+  color: #d8dfd7;
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.lesson-misconceptions {
+  margin: 0 0 44px;
+}
+
+.misconception-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.misconception-grid article {
+  padding: 24px;
+  border: 1px solid #e2c9c0;
+  border-radius: 3px;
+  background: #fbf3ef;
+}
+
+.misconception-grid article > span {
+  color: #8b4939;
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.1em;
+}
+
+.misconception-grid h4 {
+  margin: 12px 0;
+  color: #5e3027;
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+
+.misconception-grid p {
+  margin: 0;
+  color: #554842;
+  font-size: 14px;
+  line-height: 1.85;
+}
+
+.lesson-recap {
+  margin: 0 0 28px;
+  padding: 25px 28px;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--line);
+}
+
+.lesson-recap > div {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.lesson-recap h3 {
+  margin: 0;
+  font-size: 15.5px;
+  font-weight: 650;
+}
+
+.lesson-recap ul {
+  display: grid;
+  gap: 12px;
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lesson-recap li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.lesson-recap li svg {
+  flex: 0 0 auto;
+  margin-top: 5px;
+  color: #5a46d2;
+}
+
+.lesson-self-check {
+  margin-bottom: 28px;
+  border: 1px solid #bdb4ed;
+  border-radius: 3px;
+  background: #f5f2ff;
+}
+
+.lesson-self-check > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px 26px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.lesson-self-check > summary::-webkit-details-marker {
+  display: none;
+}
+
+.lesson-self-check > summary > span:first-child {
+  display: grid;
+  gap: 8px;
+}
+
+.lesson-self-check summary small {
+  color: #5945c4;
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.12em;
+}
+
+.lesson-self-check summary strong {
+  font-size: 14.5px;
+  font-weight: 620;
+  line-height: 1.65;
+}
+
+.self-check-action {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 7px;
+  color: #5142a4;
+  font-size: 12px;
+}
+
+.lesson-self-check[open] .self-check-action svg {
+  transform: rotate(180deg);
+}
+
+.lesson-self-check > div {
+  padding: 24px 26px;
+  border-top: 1px solid #d8d0f5;
+}
+
+.lesson-self-check > div > strong {
+  color: #5142a4;
+  font-size: 13px;
+}
+
+.lesson-self-check > div p {
+  margin: 9px 0 0;
+  color: #393549;
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+@media (max-width: 900px) {
+  .code-walkthrough-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .code-walkthrough pre {
+    border-right: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.13);
+  }
+}
+
+@media (max-width: 680px) {
+  .lesson-narrative {
+    margin-top: 32px;
+  }
+
+  .lesson-hook {
+    margin-bottom: 40px;
+    padding: 23px 22px;
+    border-radius: 3px 20px 3px 3px;
+  }
+
+  .lesson-hook p {
+    font-size: 16px;
+  }
+
+  .lesson-block-heading {
+    gap: 11px;
+  }
+
+  .lesson-block-heading h3 {
+    font-size: 19px;
+  }
+
+  .lesson-chapter-block .lesson-prose p {
+    font-size: 14.5px;
+    line-height: 1.95;
+  }
+
+  .lesson-derivation {
+    padding: 20px 17px;
+  }
+
+  .teaching-card-header,
+  .worked-conclusion {
+    padding: 22px 20px;
+  }
+
+  .worked-example-steps {
+    padding: 0 20px;
+  }
+
+  .worked-example-steps > li {
+    grid-template-columns: 32px minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .worked-step-index {
+    width: 30px;
+    height: 30px;
+  }
+
+  .code-walkthrough pre {
+    padding: 20px;
+    font-size: 13px;
+  }
+
+  .code-walkthrough-grid > ol {
+    padding: 10px 20px;
+  }
+
+  .misconception-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .lesson-recap {
+    padding: 22px 0;
+  }
+
+  .lesson-self-check > summary {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 14px;
+    padding: 21px 20px;
+  }
+
+  .lesson-self-check > div {
+    padding: 21px 20px;
+  }
+}
+
+/* Signal Canvas reading scale: teaching content stays readable, annotations stay secondary. */
+.lesson-hook > span,
+.lesson-block-heading > span,
+.lesson-derivation > span,
+.teaching-card-header > span,
+.misconception-grid article > span,
+.lesson-self-check summary small {
+  font-size: 14px;
+}
+
+.lesson-block-heading h3 {
+  font-size: 23.5px;
+}
+
+.lesson-chapter-block .lesson-prose p {
+  font-size: 16px;
+  line-height: 2;
+}
+
+.lesson-derivation {
+  padding: 26px;
+  border-radius: 16px;
+}
+
+.lesson-derivation > p,
+.teaching-card-header > p {
+  font-size: 14.5px;
+}
+
+.lesson-derivation .math-overflow-hint,
+.worked-example .math-overflow-hint {
+  font-size: 14px;
+}
+
+.worked-example {
+  border-radius: 18px;
+}
+
+.worked-step-index {
+  font-size: 14px;
+}
+
+.worked-example-steps h4 {
+  font-size: 16px;
+}
+
+.worked-example-steps p,
+.worked-conclusion p {
+  font-size: 15.5px;
+}
+
+.code-walkthrough {
+  border-radius: 18px;
+}
+
+.code-walkthrough pre {
+  font-size: 14px;
+}
+
+.code-walkthrough-grid > ol span {
+  font-size: 14px;
+}
+
+.code-walkthrough-grid > ol p {
+  font-size: 14px;
+}
+
+.misconception-grid h4 {
+  font-size: 16px;
+}
+
+.misconception-grid p {
+  font-size: 15.5px;
+}
+
+.lesson-recap h3 {
+  font-size: 18px;
+}
+
+.lesson-recap li {
+  font-size: 15.5px;
+}
+
+.lesson-self-check {
+  border-radius: 16px;
+}
+
+.lesson-self-check summary strong {
+  font-size: 16px;
+}
+
+.self-check-action,
+.lesson-self-check > div > strong {
+  font-size: 14px;
+}
+
+.lesson-self-check > div p {
+  font-size: 15.5px;
+}
+
+@media (max-width: 680px) {
+  .lesson-block-heading h3 {
+    font-size: 20.5px;
+  }
+
+  .lesson-chapter-block .lesson-prose p,
+  .worked-example-steps p,
+  .worked-conclusion p,
+  .misconception-grid p,
+  .lesson-recap li,
+  .lesson-self-check > div p {
+    font-size: 15.5px;
+  }
+
+  .lesson-derivation {
+    padding: 20px 17px;
+  }
+
+  .code-walkthrough pre {
+    font-size: 13px;
+  }
+}

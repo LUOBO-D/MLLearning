@@ -1,0 +1,446 @@
+/* =========================================================
+   System layer — imported last.
+   One frame, one type scale, two surfaces, one motion curve.
+   Shared by the welcome screen and every app route.
+   ========================================================= */
+
+:root {
+  /* Frame: header, page and footer share these two numbers. */
+  --content-max: 1600px;
+  --page-gutter: clamp(20px, 3vw, 56px);
+
+  /* Type scale (6 steps). Functional text never goes below 13px. */
+  --step-0: 13px;
+  --step-1: 14px;
+  --step-2: 15.5px;
+  --step-3: 19px;
+  --step-4: clamp(22px, 2vw, 27px);
+  --step-5: clamp(36px, 3.8vw, 52px);
+
+  /* Surfaces & radii (2 + 2). */
+  --surface-light: #fbfaf5;
+  --surface-dark: #0f1714;
+  --radius-card: 24px;
+  --radius-inner: 12px;
+
+  /* Brand colours shared with the welcome scene. */
+  --lime: #dff18f;
+  --violet: #6757e7;
+  --violet-bright: #9d8cff;
+
+  /* Motion. */
+  --ease-signal: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-enter: 600ms;
+  --motion-exit: 400ms;
+}
+
+/* ---------- large screens: scale the whole app, don't just widen it ---------- */
+
+@media (min-width: 1800px) { .app-shell { zoom: 1.05; } }
+@media (min-width: 2200px) { .app-shell { zoom: 1.12; } }
+@media (min-width: 2500px) { .app-shell { zoom: 1.2; } }
+
+/* ---------- one frame for header, page and footer ---------- */
+
+.page {
+  width: min(100%, var(--content-max));
+  margin-inline: auto;
+  padding-inline: var(--page-gutter);
+}
+
+.desktop-topbar {
+  padding-inline: max(var(--page-gutter), calc((100% - var(--content-max)) / 2 + var(--page-gutter)));
+}
+
+.app-footer {
+  width: min(100% - 2 * var(--page-gutter), var(--content-max) - 2 * var(--page-gutter));
+  margin-inline: auto;
+}
+
+/* ---------- ambient motif: faint data, not geometry ---------- */
+
+.ambient-data {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.ambient-data circle { fill: rgba(103, 87, 231, 0.16); }
+.ambient-data circle.is-lime { fill: rgba(126, 160, 60, 0.2); }
+.ambient-data line.ambient-fit { stroke: rgba(103, 87, 231, 0.13); stroke-width: 1.2; }
+.ambient-data line.ambient-residual { stroke: rgba(23, 54, 45, 0.08); stroke-dasharray: 2 4; }
+
+/* =========================================================
+   Today — 12-column composition
+   row 1: title (8) · meta (4)
+   row 2: current task (8) · goal + standard (4)
+   row 3: path (6) · rhythm (3) · activity (3)
+   ========================================================= */
+
+.today-page { display: grid; gap: 28px; }
+
+.today-page .card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface-light);
+  box-shadow: none;
+}
+
+.today-head {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 24px;
+  align-items: end;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--line);
+}
+
+.today-head-title { grid-column: span 8; }
+
+.today-head-title .eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 18px;
+  color: var(--violet);
+  font-family: var(--sans);
+  font-size: var(--step-1);
+  font-weight: 650;
+  letter-spacing: 0;
+}
+
+.today-head-title .today-edition { color: var(--muted); font-family: var(--mono); font-weight: 400; }
+
+.today-head h1 {
+  margin: 0;
+  color: var(--ink);
+  font-size: var(--step-5);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.08;
+}
+
+.today-head h1 em { color: var(--violet); font-style: normal; }
+
+.today-head-meta {
+  display: grid;
+  grid-column: span 4;
+  margin: 0;
+}
+
+.today-head-meta div {
+  display: grid;
+  grid-template-columns: 6em minmax(0, 1fr);
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+}
+
+.today-head-meta dt { color: var(--muted); font-size: var(--step-0); line-height: 1.7; }
+.today-head-meta dd { margin: 0; color: var(--ink); font-size: var(--step-1); line-height: 1.6; }
+
+/* ---------- row 2 ---------- */
+
+.today-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 24px;
+  align-items: stretch;
+}
+
+.today-grid > .daily-brief { grid-column: span 8; min-width: 0; margin: 0; }
+.today-grid > .today-rail { grid-column: span 4; min-width: 0; }
+
+.today-rail {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.today-rail > section { display: flex; flex-direction: column; padding: 26px 28px; }
+.today-standard .evidence-meter { margin-top: auto; }
+.today-rail > section + section { border-top: 1px solid var(--line); }
+
+.today-rail-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+  color: var(--muted);
+  font-size: var(--step-1);
+  font-weight: 600;
+}
+
+.today-rail-label svg { color: var(--violet); }
+
+.today-goal-body {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 22px;
+}
+
+.today-goal .goal-ring-wrap { position: relative; display: grid; place-items: center; margin: 0; }
+
+.today-goal .goal-ring-label {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  text-align: center;
+}
+
+.today-goal .goal-ring-label strong { color: var(--violet); font-family: var(--serif); font-size: 30px; font-weight: 400; line-height: 1; }
+.today-goal .goal-ring-label span { margin-top: 4px; color: var(--muted); font-family: var(--mono); font-size: var(--step-0); }
+.today-goal .goal-message { margin: 0; text-align: left; color: var(--ink-soft); font-size: var(--step-1); line-height: 1.75; }
+
+.today-goal-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 20px 0 0;
+}
+
+.today-goal-stats div {
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-inner);
+}
+
+.today-goal-stats dt { color: var(--muted); font-size: var(--step-0); }
+.today-goal-stats dd { margin: 4px 0 0; color: var(--ink); font-family: var(--serif); font-size: 22px; line-height: 1.1; }
+
+.today-standard .standard-fraction { color: var(--ink); font-family: var(--serif); font-size: var(--step-3); font-weight: 400; }
+
+.today-standard .daily-standard-statement {
+  margin: 0 0 18px;
+  color: var(--ink);
+  font-size: var(--step-2);
+  line-height: 1.7;
+}
+
+.today-standard .evidence-meter {
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--paper-deep);
+}
+
+.today-standard .evidence-meter i {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--violet);
+  transform-origin: left center;
+  transition: transform var(--motion-enter) var(--ease-signal);
+}
+
+.today-standard-note { margin: 14px 0 0; color: var(--muted); font-size: var(--step-0); line-height: 1.7; }
+
+/* ---------- the current-task card ---------- */
+
+.today-page .daily-brief { border-radius: var(--radius-card); background: var(--surface-dark); }
+
+.daily-brief-top p {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 14px;
+  margin: 0;
+  font-family: var(--sans);
+  font-size: var(--step-1);
+  font-weight: 650;
+  letter-spacing: 0;
+}
+
+.daily-brief-top p span { color: rgba(247, 248, 243, 0.62); font-weight: 400; }
+
+.today-page .daily-focus {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 28px;
+}
+
+.focus-scene {
+  position: relative;
+  border: 1px solid rgba(247, 248, 243, 0.08);
+  border-radius: 18px;
+  background:
+    radial-gradient(120% 140% at 85% 0%, rgba(103, 87, 231, 0.32), transparent 60%),
+    rgba(247, 248, 243, 0.03);
+  view-transition-name: hero-scene;
+}
+
+.focus-scene { min-height: 200px; padding: 0; overflow: hidden; }
+.focus-scene svg { display: block; width: 100%; height: 100%; }
+.focus-scene-fit { stroke: var(--lime); stroke-width: 1.6; }
+.focus-scene-residual { stroke: rgba(223, 241, 143, 0.35); stroke-width: 1; stroke-dasharray: 2 3; }
+.focus-scene circle { fill: rgba(196, 186, 255, 0.85); }
+.focus-scene circle.is-lit { fill: var(--lime); }
+
+.today-page .focus-content { align-self: end; }
+.today-page .daily-focus-context { margin: 0 0 12px; color: var(--lime); font-size: var(--step-0); font-weight: 600; letter-spacing: 0.02em; }
+.today-page .focus-content h2 { font-size: clamp(22px, 2vw, 28px); line-height: 1.35; }
+.today-page .daily-focus-rule { font-size: var(--step-1); }
+
+.today-page .sequence-heading h3 { margin: 0; font-size: var(--step-3); }
+
+/* ---------- row 3 ---------- */
+
+.today-row {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 24px;
+  align-items: stretch;
+}
+
+.today-row > .today-path { grid-column: 1 / -1; }
+.today-row > .today-rhythm,
+.today-row > .today-activity { grid-column: span 6; }
+.today-row > * { min-width: 0; padding: 26px 28px; }
+
+/* ---------- responsive ---------- */
+
+/* Learning path: concepts side by side when the card spans the row. */
+.today-path .learning-path { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 28px; }
+.today-path .learning-path > * { min-width: 0; }
+
+@media (max-width: 1180px) {
+  .today-head-title,
+  .today-head-meta { grid-column: 1 / -1; }
+  .today-head-meta { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 20px; }
+  .today-head-meta div { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .today-grid > .daily-brief,
+  .today-grid > .today-rail { grid-column: 1 / -1; }
+  .today-rail { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: none; }
+  .today-rail > section + section { border-top: 0; border-left: 1px solid var(--line); }
+  .today-row > .today-path { grid-column: 1 / -1; }
+  .today-row > .today-rhythm,
+  .today-row > .today-activity { grid-column: span 6; }
+}
+
+@media (max-width: 720px) {
+  .today-page { gap: 20px; }
+  .today-head { padding-bottom: 20px; }
+  .today-head-meta { grid-template-columns: minmax(0, 1fr); }
+  .today-head-meta div { grid-template-columns: 6em minmax(0, 1fr); }
+  .today-rail { grid-template-columns: minmax(0, 1fr); }
+  .today-rail > section + section { border-top: 1px solid var(--line); border-left: 0; }
+  .today-rail > section { padding: 22px 20px; }
+  .today-goal-body { grid-template-columns: minmax(0, 1fr); justify-items: start; }
+  .today-row > * { grid-column: 1 / -1 !important; padding: 22px 20px; }
+  .today-path .learning-path { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* =========================================================
+   Welcome ⇄ app continuity
+   ========================================================= */
+
+/* Same scale and same frame as the app, so the logo never jumps. */
+@media (min-width: 1800px) { .welcome-page { zoom: 1.05; } }
+@media (min-width: 2200px) { .welcome-page { zoom: 1.12; } }
+@media (min-width: 2500px) { .welcome-page { zoom: 1.2; } }
+
+.welcome-header {
+  height: 78px;
+  margin: 0;
+  padding-inline: max(var(--page-gutter), calc((100% - var(--content-max)) / 2 + var(--page-gutter)));
+}
+
+/* One emphasis rule everywhere: a single word in solid violet. */
+.welcome-title { font-weight: 460; letter-spacing: -0.06em; }
+
+.welcome-title-accent {
+  background: none;
+  color: var(--violet-bright);
+  animation: none;
+}
+
+.today-head h1 { font-weight: 460; letter-spacing: -0.05em; }
+
+/* Shared elements for the view transition. */
+.welcome-brand,
+.topbar-brand { view-transition-name: brand; }
+
+.welcome-visual { view-transition-name: hero-scene; }
+
+::view-transition-group(*) {
+  animation-duration: 820ms;
+  animation-timing-function: var(--ease-signal);
+}
+
+/* Old page stays opaque underneath; the new page fades in over it — no blank frame. */
+::view-transition-old(root) { animation: none; }
+::view-transition-new(root) { animation: vt-fade-in 640ms 80ms var(--ease-signal) both; }
+
+/* The scene keeps its aspect while it shrinks into the task card. */
+::view-transition-old(hero-scene),
+::view-transition-new(hero-scene) {
+  height: 100%;
+  object-fit: cover;
+  overflow: clip;
+}
+
+::view-transition-old(hero-scene) { animation: vt-fade-out 760ms var(--ease-signal) both; }
+::view-transition-new(hero-scene) { animation: vt-fade-in 760ms var(--ease-signal) both; }
+
+@keyframes vt-fade-out { to { opacity: 0; } }
+@keyframes vt-fade-in { from { opacity: 0; } }
+
+/* Arriving through a view transition: the card is already in place, don't re-animate it. */
+.is-vt-arrival .route-canvas,
+.is-vt-arrival .daily-brief,
+.is-vt-arrival .today-head { animation: none; }
+
+/* No-transition fallback: wash in the app's paper colour, not lime. */
+.welcome-exit-wash { background: var(--paper); }
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) { animation: none !important; }
+}
+
+/* Identical brand lockup on both sides so the shared element only cross-fades colour. */
+.topbar-brand { justify-self: start; width: max-content; }
+.welcome-brand { gap: 11px; }
+.welcome-brand svg { width: 36px; height: 36px; }
+.welcome-brand > span { gap: 4px; line-height: 1.25; }
+.welcome-brand strong { font-size: 14px; font-weight: 700; letter-spacing: 0.04em; }
+.welcome-brand small { font-size: 14px; letter-spacing: 0.04em; }
+
+/* =========================================================
+   Site-wide surfaces: light card or dark card, two radii.
+   ========================================================= */
+.page .card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  box-shadow: none;
+}
+
+/* Section labels are Chinese now: sans, medium weight, no tracking. */
+.page .eyebrow,
+.page-header .eyebrow,
+.lab-stage-kicker,
+.sidebar-section-label {
+  font-family: var(--sans);
+  font-size: var(--step-1);
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
+/* Comfortable reading sizes (tokens used across legacy styles). */
+:root {
+  --text-page-title: clamp(36px, 3.8vw, 52px);
+  --text-section: clamp(21px, 2vw, 27px);
+  --text-module: clamp(17px, 1.4vw, 19px);
+  --text-body: 15px;
+  --text-reading: 16px;
+  --text-note: 14px;
+}
+body { font-size: 15px; }

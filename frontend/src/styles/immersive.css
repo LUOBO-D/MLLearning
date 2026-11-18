@@ -1,0 +1,411 @@
+/* =========================================================
+   Immersive layer — 3D scenes and glass surfaces for interior pages.
+   Imported after system.css.
+   ========================================================= */
+
+:root {
+  --glass-bg: rgba(255, 255, 255, 0.06);
+  --glass-bg-strong: rgba(255, 255, 255, 0.1);
+  --glass-line: rgba(255, 255, 255, 0.14);
+  --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  --glass-shadow: 0 30px 80px -40px rgba(4, 8, 7, 0.8);
+  --light-glass-bg: rgba(255, 255, 255, 0.62);
+  --light-glass-line: rgba(23, 54, 45, 0.1);
+}
+
+/* ---------- 3D host ---------- */
+
+.scene3d { position: relative; width: 100%; height: 100%; min-height: 240px; }
+.scene3d canvas { display: block; width: 100% !important; height: 100% !important; }
+.scene3d--loading { background: radial-gradient(60% 60% at 50% 50%, rgba(103, 87, 231, 0.18), transparent 70%); }
+
+/* Shared glass stat panel, used over 3D scenes. */
+.glass-stats {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  left: 18px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--glass-line);
+  border-radius: 18px;
+  background: var(--glass-bg);
+  box-shadow: var(--glass-highlight), var(--glass-shadow);
+  backdrop-filter: blur(18px) saturate(1.4);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+}
+
+.glass-stats div { min-width: 0; padding: 14px 16px; }
+.glass-stats div + div { border-left: 1px solid var(--glass-line); }
+.glass-stats dt { color: rgba(244, 246, 239, 0.62); font-size: 12.5px; }
+.glass-stats dd { margin: 4px 0 0; overflow: hidden; color: #f4f6ef; font-size: 14px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+
+/* =========================================================
+   Learn — roadmap
+   ========================================================= */
+
+.learn-page--roadmap { display: grid; gap: 28px; }
+
+.roadmap-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  min-height: 460px;
+  overflow: hidden;
+  border-radius: 28px;
+  background:
+    radial-gradient(70% 90% at 85% 10%, rgba(103, 87, 231, 0.38), transparent 60%),
+    radial-gradient(60% 70% at 0% 100%, rgba(223, 241, 143, 0.1), transparent 60%),
+    #0c1311;
+  color: #f4f6ef;
+  isolation: isolate;
+}
+
+.roadmap-hero::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+  content: "";
+  mask-image: radial-gradient(90% 80% at 70% 40%, #000, transparent 75%);
+}
+
+.roadmap-hero-copy { display: flex; flex-direction: column; justify-content: center; gap: 18px; padding: clamp(28px, 4vw, 56px); }
+.roadmap-kicker { display: inline-flex; align-items: center; gap: 10px; margin: 0; color: var(--lime); font-size: 14px; font-weight: 650; }
+
+.roadmap-hero h1 {
+  margin: 0;
+  color: #f4f6ef;
+  font-size: clamp(32px, 3.4vw, 46px);
+  font-weight: 460;
+  letter-spacing: -0.04em;
+  line-height: 1.14;
+}
+
+.roadmap-hero h1 em { color: var(--violet-bright); font-style: normal; }
+.roadmap-lead { max-width: 34em; margin: 0; color: rgba(244, 246, 239, 0.72); font-size: 15px; line-height: 1.85; }
+.roadmap-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 22px; margin-top: 6px; }
+.roadmap-link { color: rgba(244, 246, 239, 0.8); font-size: 14px; text-decoration: underline; text-underline-offset: 4px; }
+.roadmap-link:hover { color: var(--lime); }
+
+.roadmap-hero-visual { position: relative; min-height: 380px; }
+.scene3d--path { position: absolute; inset: 0; }
+
+/* Stage rail */
+.roadmap-rail {
+  position: sticky;
+  top: 90px;
+  z-index: 5;
+  display: flex;
+  gap: 6px;
+  padding: 6px;
+  overflow-x: auto;
+  border: 1px solid var(--light-glass-line);
+  border-radius: 999px;
+  background: var(--light-glass-bg);
+  box-shadow: 0 16px 40px -28px rgba(15, 23, 20, 0.45);
+  backdrop-filter: blur(16px) saturate(1.3);
+  -webkit-backdrop-filter: blur(16px) saturate(1.3);
+  scrollbar-width: none;
+}
+
+.roadmap-rail-item {
+  display: inline-flex;
+  flex: 1 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 14px;
+  border-radius: 999px;
+  color: var(--ink-soft);
+  font-size: 13.5px;
+  white-space: nowrap;
+  transition: background 200ms var(--ease-signal), color 200ms var(--ease-signal);
+}
+
+.roadmap-rail-item span { color: var(--muted); font-family: var(--mono); font-size: 12px; }
+.roadmap-rail-item:hover { background: rgba(103, 87, 231, 0.08); color: var(--ink); }
+.roadmap-rail-item--current { background: var(--ink); color: #f4f6ef; }
+.roadmap-rail-item--current span { color: var(--lime); }
+.roadmap-rail-item--complete span { color: var(--success); }
+
+/* Stage list with a connecting spine */
+.roadmap-stages { position: relative; display: grid; gap: 18px; padding-left: 56px; }
+
+.roadmap-stages::before {
+  position: absolute;
+  top: 24px;
+  bottom: 24px;
+  left: 21px;
+  width: 2px;
+  border-radius: 2px;
+  background: linear-gradient(var(--violet), rgba(103, 87, 231, 0.12));
+  content: "";
+}
+
+.stage-card {
+  position: relative;
+  padding: 26px 28px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--surface-light);
+  scroll-margin-top: 150px;
+  transition: border-color 260ms var(--ease-signal), box-shadow 260ms var(--ease-signal), transform 260ms var(--ease-signal);
+}
+
+.stage-card:hover { border-color: rgba(103, 87, 231, 0.28); box-shadow: 0 24px 60px -40px rgba(41, 33, 104, 0.5); }
+
+.stage-card--current {
+  border-color: rgba(103, 87, 231, 0.4);
+  background:
+    radial-gradient(80% 120% at 100% 0%, rgba(103, 87, 231, 0.1), transparent 60%),
+    var(--surface-light);
+  box-shadow: 0 28px 70px -44px rgba(41, 33, 104, 0.6);
+}
+
+.stage-node {
+  position: absolute;
+  top: 26px;
+  left: -56px;
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 13px;
+}
+
+.stage-card--current .stage-node { border-color: var(--violet); background: var(--violet); color: #fff; box-shadow: 0 0 0 6px rgba(103, 87, 231, 0.14); }
+.stage-card--complete .stage-node { border-color: var(--success); background: var(--success-soft); color: var(--success); }
+
+.stage-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 20px 32px; align-items: start; }
+.stage-kicker { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 0 0 8px; color: var(--violet); font-size: 13.5px; font-weight: 650; }
+.stage-head h2 { margin: 0; color: var(--ink); font-size: clamp(20px, 1.8vw, 24px); font-weight: 600; letter-spacing: -0.02em; }
+.stage-tagline { margin: 6px 0 0; color: var(--muted); font-size: 14.5px; }
+
+.stage-status { display: inline-flex; align-items: center; gap: 5px; min-height: 24px; padding: 0 10px; border-radius: 999px; background: var(--paper-deep); color: var(--muted); font-size: 12.5px; font-weight: 600; }
+.stage-status--current { background: var(--violet-soft); color: var(--violet-deep); }
+.stage-status--complete { background: var(--success-soft); color: var(--success); }
+
+.stage-meta { display: grid; grid-template-columns: repeat(3, auto); gap: 0; margin: 0; border: 1px solid var(--line); border-radius: 14px; }
+.stage-meta div { padding: 10px 16px; }
+.stage-meta div + div { border-left: 1px solid var(--line); }
+.stage-meta dt { color: var(--muted); font-size: 12.5px; }
+.stage-meta dd { display: flex; align-items: center; gap: 5px; margin: 3px 0 0; color: var(--ink); font-size: 14px; font-weight: 600; white-space: nowrap; }
+
+.stage-goal { display: grid; grid-template-columns: 5.5em minmax(0, 1fr); gap: 12px; margin: 18px 0 0; padding-top: 16px; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 15px; line-height: 1.75; }
+.stage-goal strong { color: var(--ink); font-size: 13.5px; }
+
+.stage-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--violet);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.stage-toggle svg { transition: transform 260ms var(--ease-signal); }
+.stage-toggle[aria-expanded="true"] svg { transform: rotate(90deg); }
+
+.stage-body { display: grid; gap: 22px; margin-top: 18px; animation: rise-in 420ms var(--ease-signal) both; }
+.stage-body[hidden] { display: none; }
+.stage-block h3 { margin: 0 0 12px; color: var(--ink); font-size: 14.5px; font-weight: 650; }
+
+.stage-outcomes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 24px; margin: 0; padding: 0; list-style: none; }
+.stage-outcomes li { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 8px; color: var(--ink-soft); font-size: 14.5px; line-height: 1.7; }
+.stage-outcomes svg { margin-top: 5px; color: var(--success); }
+
+.stage-chapters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+
+.stage-chapter {
+  position: relative;
+  display: grid;
+  gap: 6px;
+  padding: 18px 20px;
+  overflow: hidden;
+  border-radius: 18px;
+  background:
+    radial-gradient(90% 120% at 100% 0%, rgba(103, 87, 231, 0.35), transparent 60%),
+    #0f1714;
+  color: #f4f6ef;
+  transition: transform 260ms var(--ease-signal), box-shadow 260ms var(--ease-signal);
+}
+
+.stage-chapter:hover { transform: translateY(-3px); box-shadow: 0 24px 50px -30px rgba(15, 23, 20, 0.7); }
+.stage-chapter-index { color: var(--lime); font-size: 12.5px; font-weight: 650; }
+.stage-chapter strong { font-size: 18px; font-weight: 600; }
+.stage-chapter-kicker { color: rgba(244, 246, 239, 0.7); font-size: 14px; }
+.stage-chapter-meta { display: flex; justify-content: space-between; gap: 12px; margin-top: 6px; color: rgba(244, 246, 239, 0.6); font-size: 12.5px; }
+.stage-chapter-bar { height: 4px; overflow: hidden; border-radius: 999px; background: rgba(255, 255, 255, 0.12); }
+.stage-chapter-bar i { display: block; height: 100%; background: var(--lime); transform-origin: left center; }
+.stage-chapter-arrow { position: absolute; top: 18px; right: 18px; color: rgba(244, 246, 239, 0.6); }
+
+.stage-terms { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 24px; margin: 0; padding: 0; list-style: none; counter-reset: none; }
+.stage-terms li { border-top: 1px solid var(--line); }
+.stage-terms a { display: grid; grid-template-columns: 26px minmax(0, 1fr) auto; gap: 10px; align-items: start; padding: 11px 2px; color: inherit; }
+.stage-terms a:hover strong { color: var(--violet); }
+.stage-term-index { color: var(--muted); font-family: var(--mono); font-size: 12px; line-height: 1.9; }
+.stage-term-copy { display: grid; gap: 2px; min-width: 0; }
+.stage-term-copy strong { color: var(--ink); font-size: 14.5px; font-weight: 600; transition: color 160ms ease; }
+.stage-term-copy small { overflow: hidden; color: var(--muted); font-size: 13px; line-height: 1.6; text-overflow: ellipsis; white-space: nowrap; }
+.stage-term-level { padding: 2px 8px; border-radius: 999px; background: var(--paper-deep); color: var(--muted); font-size: 12px; white-space: nowrap; }
+.stage-term-level--进阶 { background: var(--violet-soft); color: var(--violet-deep); }
+
+.stage-milestone {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 14px 18px;
+  align-items: center;
+  padding: 18px 20px;
+  border: 1px dashed rgba(103, 87, 231, 0.36);
+  border-radius: 18px;
+  background: rgba(103, 87, 231, 0.04);
+}
+
+.stage-milestone > svg { color: var(--violet); }
+.stage-milestone h3 { margin: 0 0 4px; color: var(--ink); font-size: 15px; }
+.stage-milestone p { margin: 0; color: var(--ink-soft); font-size: 14px; line-height: 1.7; }
+
+/* Method strip */
+.roadmap-method {
+  display: grid;
+  grid-template-columns: minmax(0, 0.6fr) minmax(0, 1.4fr);
+  gap: 20px 40px;
+  align-items: start;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--surface-light);
+}
+
+.roadmap-method h2 { margin: 10px 0 0; color: var(--ink); font-size: 22px; font-weight: 600; }
+.roadmap-method ol { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 28px; margin: 0; padding: 0; list-style: none; counter-reset: method; }
+.roadmap-method li { display: grid; gap: 4px; padding-left: 36px; position: relative; counter-increment: method; }
+.roadmap-method li::before { position: absolute; top: 0; left: 0; display: grid; width: 24px; height: 24px; place-items: center; border-radius: 50%; background: var(--ink); color: var(--lime); content: counter(method); font-family: var(--mono); font-size: 12px; }
+.roadmap-method li strong { color: var(--ink); font-size: 15px; }
+.roadmap-method li span { color: var(--ink-soft); font-size: 14px; line-height: 1.7; }
+.roadmap-library { display: inline-flex; grid-column: 2; align-items: center; gap: 8px; color: var(--violet); font-size: 14px; font-weight: 600; }
+
+/* =========================================================
+   Concept hero — dark, 3D, glass
+   ========================================================= */
+
+.concept-page .concept-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0;
+  min-height: 420px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 28px;
+  background:
+    radial-gradient(70% 90% at 90% 0%, rgba(103, 87, 231, 0.36), transparent 60%),
+    radial-gradient(50% 60% at 0% 100%, rgba(223, 241, 143, 0.08), transparent 60%),
+    #0c1311;
+  color: #f4f6ef;
+  box-shadow: 0 40px 100px -60px rgba(12, 19, 17, 0.8);
+}
+
+.concept-page .concept-hero::before,
+.concept-page .concept-hero::after { display: none; }
+
+.concept-page .concept-hero-content { align-self: center; padding: clamp(28px, 4vw, 52px); }
+.concept-page .concept-hero-meta { color: rgba(244, 246, 239, 0.72); }
+.concept-page .concept-hero-meta > span:first-child { color: var(--lime); font-family: var(--sans); font-size: 13.5px; font-weight: 650; letter-spacing: 0; }
+.concept-page .concept-english { color: var(--violet-bright); font-size: 14px; letter-spacing: 0.02em; }
+.concept-page .concept-hero h1 { color: #f4f6ef; font-size: clamp(36px, 3.6vw, 50px); font-weight: 480; letter-spacing: -0.04em; }
+.concept-page .concept-hero h2 { color: rgba(244, 246, 239, 0.9); font-size: clamp(18px, 1.6vw, 21px); }
+.concept-page .concept-hero-content > p:not(.concept-english) { color: rgba(244, 246, 239, 0.7); font-size: 15px; line-height: 1.85; }
+
+.concept-page .concept-hero-tags span {
+  border-color: var(--glass-line);
+  background: var(--glass-bg);
+  color: rgba(244, 246, 239, 0.86);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.concept-hero-visual { position: relative; min-height: 360px; }
+.concept-hero-visual .scene3d { position: absolute; inset: 0; }
+.concept-hero-visual > .concept-art { position: absolute; inset: 24px 24px 110px; color: rgba(244, 246, 239, 0.7); }
+.glass-stats--hero { left: 18px; }
+
+/* =========================================================
+   Glass details on light pages
+   ========================================================= */
+
+.today-rail,
+.page-header .header-note {
+  background: var(--light-glass-bg);
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+}
+
+.desktop-topbar {
+  background: rgba(243, 242, 236, 0.72);
+  backdrop-filter: blur(22px) saturate(1.5);
+  -webkit-backdrop-filter: blur(22px) saturate(1.5);
+}
+
+/* ---------- responsive ---------- */
+
+@media (max-width: 1100px) {
+  .roadmap-hero,
+  .concept-page .concept-hero { grid-template-columns: minmax(0, 1fr); }
+  .roadmap-hero-visual,
+  .concept-hero-visual { min-height: 340px; }
+  .stage-head { grid-template-columns: minmax(0, 1fr); }
+  .stage-meta { justify-self: start; }
+  .roadmap-method { grid-template-columns: minmax(0, 1fr); }
+  .roadmap-library { grid-column: 1; }
+}
+
+@media (max-width: 720px) {
+  .roadmap-hero,
+  .concept-page .concept-hero { border-radius: 22px; }
+  .roadmap-hero-visual,
+  .concept-hero-visual { min-height: 300px; }
+  .glass-stats { right: 12px; bottom: 12px; left: 12px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .glass-stats div:nth-child(3) { border-left: 0; }
+  .glass-stats div:nth-child(n + 3) { border-top: 1px solid var(--glass-line); }
+  .roadmap-rail { top: 64px; border-radius: 16px; }
+  .roadmap-stages { padding-left: 0; }
+  .roadmap-stages::before { display: none; }
+  .stage-node { position: static; width: 36px; height: 36px; margin-bottom: 12px; }
+  .stage-card { padding: 20px 18px; }
+  .stage-meta { grid-template-columns: repeat(3, minmax(0, 1fr)); width: 100%; }
+  .stage-meta div { padding: 8px 10px; }
+  .stage-goal { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .stage-outcomes,
+  .stage-chapters,
+  .stage-terms,
+  .roadmap-method ol { grid-template-columns: minmax(0, 1fr); }
+  .stage-milestone { grid-template-columns: minmax(0, 1fr); }
+  .stage-milestone > svg { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage-body { animation: none; }
+  .stage-chapter:hover { transform: none; }
+}
+
+.concept-page .concept-hero .status-pill { border: 1px solid var(--glass-line); background: var(--glass-bg-strong); color: #f4f6ef; }
+.concept-page .concept-hero .status-pill--in_progress { border-color: rgba(223, 241, 143, 0.4); color: var(--lime); }
+.concept-page .concept-hero .status-pill--completed { border-color: rgba(223, 241, 143, 0.5); background: rgba(223, 241, 143, 0.14); color: var(--lime); }
